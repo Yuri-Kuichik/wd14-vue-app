@@ -12,7 +12,7 @@ export default {
       <img class="logo" src="/src/assets/logo.svg" alt="logo Vue">
       <nav class="d-flex">
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink :to=" { name: 'about' } ">About</RouterLink>
         <RouterLink to="/login">Login</RouterLink>
       </nav>
     </BaseLayout>
