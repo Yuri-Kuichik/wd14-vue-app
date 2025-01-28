@@ -97,7 +97,7 @@ export default {
     <div class="sign-in-form-wrapper">
 
       <form class="sign-in-form">
-        <h2>Form sign in</h2>
+        <h2>Sign in</h2>
 
         <BaseInput
           class="sign-in-form__input"
