@@ -1,8 +1,16 @@
 <script>
+import { useAuth } from '@/stores/auth';
+
 import BaseLayout from './BaseLayout.vue';
 
 export default {
-    components: { BaseLayout }
+    components: { BaseLayout },
+
+    data() {
+      return {
+        authStore: useAuth()
+      }
+    }
 }
 </script>
 
@@ -10,7 +18,7 @@ export default {
   <div class="app-header">
     <BaseLayout class="header-section">
       <img class="logo" src="/src/assets/logo.svg" alt="logo Vue">
-      <nav class="d-flex">
+      <nav class="d-flex" v-if="authStore.accessToken">
         <RouterLink to="/">Home</RouterLink>
         <RouterLink :to=" { name: 'about' } ">About</RouterLink>
         <RouterLink to="/login">Login</RouterLink>

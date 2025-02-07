@@ -50,10 +50,6 @@
             }
         },
 
-        updated() {
-            console.log('updated', this)
-        },
-
         methods: {
             updateModel(val) {
                 this.$emit('changeValue', val)

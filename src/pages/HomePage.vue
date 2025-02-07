@@ -1,20 +1,25 @@
 <script>
+import { useAuth } from '@/stores/auth'; 
+
 import BaseLayout from '@/components/BaseLayout.vue';
 import SharedButton from '@/components/SharedButton.vue';
 import BaseModal from '@/components/BaseModal.vue';
 import BaseButton from '@/components/BaseButton.vue';
+import PostList from '@/components/PostList.vue';
 
 export default {
   components: {
     BaseLayout,
     SharedButton,
     BaseModal,
-    BaseButton
+    BaseButton,
+    PostList
   },
   data() {
     return {
       themeButton: 'success',
       currentComponent: 'SharedButton',
+      storeAuth: useAuth()
     }
   },
 
@@ -27,11 +32,8 @@ export default {
       this.currentComponent = this.currentComponent === 'SharedButton' ? 'BaseModal' : 'SharedButton'
     },
 
-    goToAboutPage() {
-      console.log('router: ', this.$router)
-      console.log('route: ', this.$route)
-
-      this.$router.push({name: 'about', params: { id: '12' }})
+    goToAboutPage(id) {
+      this.$router.push({name: 'about', params: { id: '12' }, query: 'vue'})
     }
   }
 }
@@ -39,24 +41,10 @@ export default {
 </script>
 
 <template>
-  <main>
+  <div>
     <BaseLayout>
       <h1>Home page</h1>
-
-      <BaseButton @click="goToAboutPage" text-button="Go to about page"/>
-
-      <KeepAlive>
-        <component :is="currentComponent"></component>
-      </KeepAlive>
-      
-
-      <SharedButton @click="toggleCurrentComponent" :theme="themeButton" @change-param="changeThemeButton">
-        Change component
-      </SharedButton>
-
-      <MySharedButton>
-        I am button
-      </MySharedButton>
+      <PostList />
     </BaseLayout>
-  </main>
+  </div>
 </template>

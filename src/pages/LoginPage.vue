@@ -1,4 +1,5 @@
 <script>
+import { useAuth } from "@/stores/auth";
 import BaseButton from '@/components/BaseButton.vue';
 
 export default {
@@ -14,23 +15,13 @@ export default {
       emailMsgErr: '',
       passwordMsgErr: '',
       loading: false, 
-      postList: null
+      postList: null,
+      tokenData: null,
+      authStore: useAuth()
     }
   },
 
-  mounted() {
-    console.log(`компонент теперь примонтирован.`)
-  },
-
-  updated() {
-    console.log('updated from login page', this)
-  },
-
   methods: {
-    // signIn() {
-    //   console.log(this.nameUser, this.passwordUser)
-    // },
-
     changeEmail(value) {
       this.email = value
     },
@@ -43,50 +34,9 @@ export default {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
     },
 
-    async getPostList(limit, search, author__course_group) {
-      await fetch(`https://studapi.teachmeskills.by/blog/posts/`)
-      .then((response) => response.json())
-      .then((json) => { 
-        this.postList = json
-        console.log(json)
-      });
-    },
-
-    async signIn() {
-      this.loading = true
-
-      // await this.getPostList()
-
-      const data = {
-        email: this.email,
-        password: this.password
-      }
-
-      try {
-        const response = await fetch('https://studapi.teachmeskills.by/auth/jwt/create/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(data)
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const tokenData = await response.json();
-          console.log('tokenData: ', tokenData)
-
-        this.$router.push('/');
-      } catch (error) {
-          console.log(error.message)
-
-      } finally {
-          this.loading = false;
-      }
-
-    },
+    async login() {
+      await this.authStore.signIn(this.email, this.password)
+    }
   }
 }
 
@@ -125,8 +75,8 @@ export default {
         <BaseButton 
             class="sign-in-form__button"
             text-button="Submit" 
-            :loading="loading"
-            @click.prevent="signIn"
+            :loading="authStore.loading"
+            @click.prevent="login"
         />
       </form>
     </div>
