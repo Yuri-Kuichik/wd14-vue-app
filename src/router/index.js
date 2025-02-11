@@ -3,6 +3,7 @@ import { useAuth } from '@/stores/auth'
 
 import HomeView from '../pages/HomePage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
+import PostPage from '@/pages/PostPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,22 +30,28 @@ const router = createRouter({
       name: 'login',
       component: LoginPage,
     },
+    {
+      path: '/post/:id',
+      name: 'post',
+      component: PostPage
+    }
   ],
 })
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuth();
 
-  if (to.name !== 'login') {
-    if ( !authStore.accessToken ) {
-      next({ name: 'login' })
-    }
+  if ( !authStore.isAuth()) {
+    next({ name: 'login' })
   } 
 
+  // if (to.name !== 'login') {
+  //   if ( authStore.isAuth() ) {
+  //     next({ name: 'login' })
+  //   }
+  // } 
+
   // const authStore = useAuth(); // Используйте Pinia store
-  console.log(to)
-  console.log(from)
-  console.log(authStore);
   
   next();
 });

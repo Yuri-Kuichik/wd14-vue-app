@@ -5,19 +5,13 @@ export default {
       type: Object,
       default: () => ({})
     }
-  },
-
-  methods: {
-    openPostPage() {
-
-    }
   }
 }
 
 </script>
 
 <template>
-  <div class="post-list-item" @click="openPagePost">
+  <div class="post-list-item">
     <div class="post-list-item__content">
       <h2 class="post-list-item__title">{{ model.title }}</h2>
       <p class="post-list-item__description">{{ model.description }}</p>
