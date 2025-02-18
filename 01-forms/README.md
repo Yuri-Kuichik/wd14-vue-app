@@ -7,7 +7,7 @@
 
 Требуется разработать компонент `RegistrationForm` (по примеру формы sign in на Login page)
 
-- там должно быть 4 инпута. 1) username: "string" 2) email: "string" 3) password: "string" 4) course_group: 0 (здесь будет id нашей группы - 14)
+- там должно быть 4 инпута. 1) username: "string" 2) email: "string" 3) password: "string" 4) course_group: 0 (здесь будет id нашей группы - 15)
 - кнопка с отправкой всех данных в консоль. Все поля обязательны, поэтому если хоть одно поле пустое, кнопка должна быть задизейблена (disabled)
 - компонент импортировать в LoginPage
 

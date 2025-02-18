@@ -17,8 +17,7 @@ export const useAuth = defineStore('auth', {
       tokenKey: 'postsApp__accessToken',
       refreshTokenKey: 'postsApp__refreshToken',
       loading: false,
-
-      accessUrl: 'http://studapi.teachmeskills.by//activate/OTAwNQ/cl17wn-509a2a3589302457cbe87a2a27719428'
+      accessUrl: 'http://studapi.teachmeskills.by//activate/OTAwOQ/clfli6-20ff1d26072d599e5ffe2fc2fe059c56',
     }
   },
 
@@ -46,14 +45,13 @@ export const useAuth = defineStore('auth', {
       console.log(resData)
     },
 
-    async createUser(data) {
-      return await instanceAxios.post('/auth/users/', data )
-    },
+   
 
     // после регистрации и того, как пришло письмо с url на почту, и вы сохранили этот url здесь в state -> url, 
     // отправляем полученные данные на сервер для активации профиля
     async authUserActivation() {
       const data = this.getDataUserFromUrl()
+      console.log(data)
 
       await instanceAxios.post('/auth/users/activation/', data )
     },
@@ -62,10 +60,11 @@ export const useAuth = defineStore('auth', {
     // этот url вам должет придти на почту после регистрации
     getDataUserFromUrl() {
       const str = this.accessUrl.split('activate/')[1]
+      console.log(str.split('/'))
 
-      // const uid = str.split('/')[0]
-      // const token = str.split('/')[1]
-      [ uid, id ] = str.split('/');
+      const uid = str.split('/')[0]
+      const token = str.split('/')[1]
+      // [ uid, token ] = str.split('/');
 
       return {uid, token}
     },
@@ -89,6 +88,30 @@ export const useAuth = defineStore('auth', {
         console.log('verifyToken: ', this.verifyToken())
 
         // this.router.push('/');
+      } catch (error) {
+        console.log(error.message)
+
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async createUser(data) {
+      return await instanceAxios.post('/auth/users/', data )
+    },
+
+    async createUser(data) {
+      this.loading = true;
+
+      try {
+        const response = await instanceAxios.post('/auth/users/', data )
+
+        if (response.statusText !== 'OK') {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        console.log(response)
+
       } catch (error) {
         console.log(error.message)
 

@@ -7,37 +7,30 @@
     </button>  
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue'
+
 import VueSpinner from './VueSpinner.vue';
 
-export default {
-    components: { 
-        VueSpinner 
+const props = defineProps({
+    textButton: {
+        type: String,
+        default: 'Click me'
     },
-    
-    props: {
-        textButton: {
-            type: String,
-            default: 'Click me'
-        },
-        size: {
-            type: String,
-            default: 'm'
-        },
-        loading: {
-            type: Boolean,
-            default: false
-        }
+    size: {
+        type: String,
+        default: 'm'
     },
-
-    computed: {
-        rootClass() {
-            return {
-                [`base-batton_size--${this.size}`]: true
-            }
-        }
+    loading: {
+        type: Boolean,
+        default: false
     }
-}
+})
+
+const rootClass = computed(() => {
+   return { [`base-batton_size--${props.size}`]: true }
+})
+
 </script>
 
 <style scoped>

@@ -1,52 +1,39 @@
-<script>
+<script setup>
+import { ref } from 'vue';
 import { useAuth } from "@/stores/auth";
 
 import BaseInput from "./BaseInput.vue";
 import BaseButton from "./BaseButton.vue";
 
-export default {
-  components: {
-    BaseInput,
-    BaseButton
-  },
+const email = ref(''); // { value: '' }
+const password = ref('');
+const passwordFieldType = ref('password');
+const emailMsgErr = ref('');
+const passwordMsgErr = ref('');
+const loading = ref(false);
+const authStore = useAuth();
 
-  data() {
-    return {
-      title: 'Sign In',
-      email: '',
-      password: '',
-      passwordFieldType: 'password',
-      emailMsgErr: '',
-      passwordMsgErr: '',
-      loading: false, 
-      authStore: useAuth(),
-    }
-  },
+function changeEmail(value) {
+  email.value = value
+}
 
-  methods: {
-    changeEmail(value) {
-      this.email = value
-    },
+function changePassword(value) {
+  password.value = value
+}
 
-    changePassword(value) {
-      this.password = value
-    },
+function switchVisibilityPassword() {
+  passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password'
+}
 
-    switchVisibilityPassword() {
-      this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
-    },
-
-    async login() {
-      await this.authStore.signIn(this.email, this.password)
-    }
-  }
+async function login() {
+  await authStore.signIn(email.value, password.value)
 }
 </script>
 
 <template>
   <div class="sign-in-form-wrapper">
     <form class="sign-in-form">
-      <h2>{{ title }}</h2>
+      <h2>Sign In</h2>
 
       <BaseInput
         class="sign-in-form__input"

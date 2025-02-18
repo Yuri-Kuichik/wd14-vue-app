@@ -1,12 +1,24 @@
 <script>
 import { useAuth } from "@/stores/auth";
 
+import BaseInput from "./BaseInput.vue";
+import BaseButton from "./BaseButton.vue";
+
 export default {
+  components: {
+    BaseInput, BaseButton
+  },
+
   data() {
     return {
       title: 'Registration form',
       authStore: useAuth(),
-      
+      name: '',
+      email: '',
+      password: '',
+      passwordFieldType: 'password',
+      emailMsgErr: '',
+      passwordMsgErr: ''
     }
   },
 
@@ -20,7 +32,38 @@ export default {
       }
 
       const res = await this.authStore.createUser(data)
-    }
+    },
+
+    changeName(value) {
+      this.name = value
+    },
+
+    changeEmail(value) {
+      this.email = value
+    },
+
+    changePassword(value) {
+      this.password = value
+    },
+
+    switchVisibilityPassword() {
+      this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
+    },
+
+    async createUser() {
+      const data = {
+        "username": this.name,
+        "email": this.email,
+        "password": this.password,
+        "course_group": 15
+      }
+
+      await this.authStore.createUser(data);
+    },
+
+    async activation() {
+      await this.authStore.authUserActivation();
+    } 
   }
 }
 </script>
@@ -30,8 +73,55 @@ export default {
     <form class="registration-form">
       <h2>{{ title }}</h2>
 
-      <button @click.prevent="create">Create</button>
-      <button @click.prevent="authStore.authUserActivation()">Activation</button>
+      <BaseInput
+        class="registration-form__input"
+        name="name"
+        label="Name"
+        placeholder="Input your name"
+        :value="name"
+        @change-value="changeName"
+        :error-message="emailMsgErr"
+      />
+
+      <BaseInput
+        class="registration-form__input"
+        name="email"
+        label="Email"
+        placeholder="Input your email"
+        :value="email"
+        @change-value="changeEmail"
+        :error-message="emailMsgErr"
+      />
+
+      <BaseInput 
+        class="registration-form__input" 
+        name="password"
+        label="Password"
+        placeholder="Input your passowrd"
+        :value="password"
+        :type="passwordFieldType"
+        password-field
+        @change-value="changePassword"
+        @switch-type="switchVisibilityPassword"
+        :error-message="passwordMsgErr"
+      />
+
+      <BaseButton 
+        class="registration-form__button"
+        text-button="Submit" 
+        :loading="authStore.loading"
+        @click.prevent="createUser"
+      />
+
+      <BaseButton 
+        class="registration-form__button"
+        text-button="Activate" 
+        :loading="authStore.loading"
+        @click.prevent="activation"
+      />
+
+      <!-- <button @click.prevent="create">Create</button>
+      <button @click.prevent="authStore.authUserActivation()">Activation</button> -->
 
       <span class="registration-form__toggle" @click="$emit('toggle')">sign in</span>
     </form>
